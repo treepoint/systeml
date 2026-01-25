@@ -59,7 +59,6 @@ class FilesAndFolders():
         with open(path, "w", encoding="utf-8") as f:
             f.write(json_str)
 
-
     def load_object_from_file(self, path):
         try:
             with open(path, "r", encoding="utf-8") as f:

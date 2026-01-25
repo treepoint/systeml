@@ -1,4 +1,0 @@
-unidecode 
-pandas 
-python-Levenshtein 
-langid
