@@ -126,3 +126,12 @@ class Parsing():
             return False
         except:
             return False
+        
+    def is_pptx(self, text):
+        if not text or not isinstance(text, str):
+            return False
+        
+        if "<!-- Slide number: 1 -->" in text:
+            return True
+        else:
+            return False
