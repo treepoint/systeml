@@ -11,7 +11,7 @@ class Mime():
                 data = f.read(4096)
         
         if not data:
-            return "application/octet-stream"
+            return "text/plain"
         
         # === ИЗОБРАЖЕНИЯ ===
         if data[:8] == b'\x89PNG\r\n\x1a\n':
