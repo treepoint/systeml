@@ -4,16 +4,31 @@ import ast
 from io import StringIO
 
 class Parsing():
-    def is_csv(self, text, min_rows = 3):
-        possible_delimiters = [',', ';', '\t', '|']
+    def is_csv(self, text, min_rows=3):
+        lines = text.strip().split("\n")
+        
+        # CHECK ALL LINES FOR MARKDOWN SEPARATOR PATTERN
+        for line in lines:
+            stripped = line.strip()
+            # MARKDOWN SEPARATOR: |---|---| OR | --- | --- | ETC.
+            # MUST HAVE PIPES AND DASHES/COLONS
+            if "|" in stripped and "-" in stripped:
+                # PATTERN: STARTS/ENDS WITH |, INSIDE ONLY -, :, |, SPACES
+                if re.match(r"^\|?[\s\-:|]+\|[\s\-:|]*$", stripped):
+                    # CHECK THAT THERE ARE ENOUGH DASHES (MINIMUM 3)
+                    if stripped.count("-") >= 3:
+                        return False
+        
+        possible_delimiters = [",", ";", "\t", "|"]
         
         for delim in possible_delimiters:
             try:
-                df = pd.read_csv(StringIO(text), sep=delim, engine='python', nrows=min_rows)
+                df = pd.read_csv(StringIO(text), sep=delim, engine="python", nrows=min_rows)
                 if len(df) >= min_rows:
                     return True
             except Exception:
                 continue
+        
         return False
 
     def is_markdown(self, text):
