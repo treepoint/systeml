@@ -28,6 +28,18 @@ class FilesAndFolders():
         path = Path(folder)
         path.mkdir(parents = True, exist_ok = True)
 
+    def delete_folder(self, folder):
+        if not os.path.exists(folder):
+            return
+
+        if not os.path.isdir(folder):
+            return
+
+        try:
+            shutil.rmtree(folder)
+        except Exception as e:
+            print(f"Error while delete {folder}. Reason: {e}")
+
     def is_folder_exists(self, folder):
         return os.path.isdir(folder)
     
