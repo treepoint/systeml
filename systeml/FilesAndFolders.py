@@ -1,10 +1,29 @@
 import os
-from pathlib import Path
-import shutil
 import re
 import uuid
-from unidecode import unidecode
 import json
+import shutil
+import datetime
+import dataclasses
+from enum import Enum
+from pathlib import Path
+from unidecode import unidecode
+
+class UniversalEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if dataclasses.is_dataclass(obj) and not isinstance(obj, type):
+            return dataclasses.asdict(obj)
+        if isinstance(obj, Enum):
+            return obj.value
+        if isinstance(obj, (datetime.datetime, datetime.date)):
+            return obj.isoformat()
+        if isinstance(obj, uuid.UUID):
+            return str(obj)
+        if isinstance(obj, set):
+            return list(obj)
+        if isinstance(obj, bytes):
+            return obj.decode("utf-8")
+        return super().default(obj)
 
 class FilesAndFolders():
     def clear_folder(self, folder):
@@ -66,8 +85,7 @@ class FilesAndFolders():
         return safe_name
     
     def dump_object_to_file(self, obj, path):
-        json_str = json.dumps(obj, ensure_ascii=False, indent=4)
-
+        json_str = json.dumps(obj, cls=UniversalEncoder, ensure_ascii=False, indent=4)
         with open(path, "w", encoding="utf-8") as f:
             f.write(json_str)
 
