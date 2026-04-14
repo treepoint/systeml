@@ -41,7 +41,7 @@ class FilesAndFolders():
                 elif os.path.isdir(file_path):
                     shutil.rmtree(file_path)
             except Exception as e:
-                print(f"Error while delete {file_path}. Reason: {e}")
+                self.logger.log(f"Error while delete {file_path}. Reason: {e}")
 
     def create_folder(self, folder):
         path = Path(folder)
@@ -57,7 +57,7 @@ class FilesAndFolders():
         try:
             shutil.rmtree(folder)
         except Exception as e:
-            print(f"Error while delete {folder}. Reason: {e}")
+            self.logger.log(f"Error while delete {folder}. Reason: {e}")
 
     def is_folder_exists(self, folder):
         return os.path.isdir(folder)
@@ -94,8 +94,8 @@ class FilesAndFolders():
             with open(path, "r", encoding="utf-8") as f:
                 return json.load(f)
         except FileNotFoundError:
-            print(f"❌ Error: File not found - {path}")
+            self.logger.log(f"❌ Error: File not found - {path}")
             return False
         except json.JSONDecodeError as e:
-            print(f"❌ Error: Failed to decode JSON - {e}")
+            self.logger.log(f"❌ Error: Failed to decode JSON - {e}")
             return False
